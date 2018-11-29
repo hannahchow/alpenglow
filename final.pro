@@ -34,6 +34,7 @@ HEADERS += ui/mainwindow.h \
     ui/view.h \
     ui/viewformat.h \
     ui/Databinding.h \
+    ui/settings.h \
 
 FORMS += ui/mainwindow.ui
 INCLUDEPATH += glm ui glew-1.10.0/include
