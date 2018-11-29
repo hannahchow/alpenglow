@@ -65,7 +65,7 @@
     <widget class="QSlider" name="horizontalSlider">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>30</x>
        <y>160</y>
        <width>160</width>
        <height>22</height>
@@ -86,6 +86,16 @@
      </property>
      <property name="text">
       <string>Sun Position</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>160</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
      </property>
     </widget>
    </widget>
