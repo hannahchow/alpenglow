@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "Databinding.h"
 #include "view.h"
 #include <QGLFormat>
 
