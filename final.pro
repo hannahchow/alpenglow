@@ -27,7 +27,8 @@ SOURCES += ui/mainwindow.cpp \
     ui/view.cpp \
     ui/viewformat.cpp \
     ui/Databinding.cpp \
-    ui/Settings.cpp
+    ui/Settings.cpp \
+    src/terrain.cpp \
 
 HEADERS += ui/mainwindow.h \
     ui_mainwindow.h \
@@ -35,7 +36,8 @@ HEADERS += ui/mainwindow.h \
     ui/view.h \
     ui/viewformat.h \
     ui/Databinding.h \
-    ui/Settings.h
+    ui/Settings.h \
+    src/terrain.h
 
 FORMS += ui/mainwindow.ui
 INCLUDEPATH += glm ui glew-1.10.0/include
