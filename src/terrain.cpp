@@ -1,6 +1,6 @@
 #include "terrain.h"
 #include "Settings.h"
-#include "lib/resourceloader.h"
+#include "lib/ResourceLoader.h"
 #include <iostream>
 
 Terrain::Terrain(){
