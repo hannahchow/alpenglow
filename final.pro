@@ -29,6 +29,9 @@ SOURCES += ui/mainwindow.cpp \
     ui/Databinding.cpp \
     ui/Settings.cpp \
     src/terrain.cpp \
+    lib/BGRA.cpp \
+    lib/CS123XmlSceneParser.cpp \
+    lib/ResourceLoader.cpp \
 
 HEADERS += ui/mainwindow.h \
     ui_mainwindow.h \
@@ -37,7 +40,10 @@ HEADERS += ui/mainwindow.h \
     ui/viewformat.h \
     ui/Databinding.h \
     ui/Settings.h \
-    src/terrain.h
+    src/terrain.h \
+    lib/BGRA.h \
+    lib/CS123XmlSceneParser.h \
+    lib/ResourceLoader.h \
 
 FORMS += ui/mainwindow.ui
 INCLUDEPATH += glm ui glew-1.10.0/include
