@@ -23,6 +23,9 @@ private:
 class ResourceLoader
 {
 public:
+    static void initializeGlew();
+    static GLuint createShaderProgram(const char * vertex_file_path,const char * fragment);
+    static GLuint createShader(GLenum shaderType, const char *filepath);
     static std::string loadResourceFileToString(const std::string &resourcePath);
 };
 

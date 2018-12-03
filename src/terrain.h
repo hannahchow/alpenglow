@@ -11,6 +11,7 @@ public:
     Terrain();
     ~Terrain();
 private:
+    void intializeGL();
     GLuint m_mountainProgram;
 };
 
