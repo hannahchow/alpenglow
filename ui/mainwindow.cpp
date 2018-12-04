@@ -27,7 +27,7 @@ void MainWindow::dataBind() {
     }
 
     BIND(FloatBinding::bindSliderAndTextbox(
-        ui->horizontalSlider, ui->lineEdit, settings.sunPosition, 0.f, 100.f))
+        ui->sunPositionSlider, ui->sunPositionText, settings.sunPosition, 0.f, 100.f))
     BIND(BoolBinding::bindCheckbox(ui->bumpMappingCheckbox, settings.bumpMapping))
 
     #undef BIND

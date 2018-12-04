@@ -35,9 +35,9 @@ public:
     QDockWidget *dockWidget;
     QWidget *dockWidgetContents;
     QCheckBox *bumpMappingCheckbox;
-    QSlider *horizontalSlider;
+    QSlider *sunPositionSlider;
     QLabel *label;
-    QLineEdit *lineEdit;
+    QLineEdit *sunPositionText;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -66,16 +66,16 @@ public:
         bumpMappingCheckbox = new QCheckBox(dockWidgetContents);
         bumpMappingCheckbox->setObjectName(QStringLiteral("bumpMappingCheckbox"));
         bumpMappingCheckbox->setGeometry(QRect(50, 250, 271, 31));
-        horizontalSlider = new QSlider(dockWidgetContents);
-        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
-        horizontalSlider->setGeometry(QRect(30, 160, 160, 22));
-        horizontalSlider->setOrientation(Qt::Horizontal);
+        sunPositionSlider = new QSlider(dockWidgetContents);
+        sunPositionSlider->setObjectName(QStringLiteral("sunPositionSlider"));
+        sunPositionSlider->setGeometry(QRect(30, 160, 160, 22));
+        sunPositionSlider->setOrientation(Qt::Horizontal);
         label = new QLabel(dockWidgetContents);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(70, 180, 241, 31));
-        lineEdit = new QLineEdit(dockWidgetContents);
-        lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setGeometry(QRect(200, 160, 31, 21));
+        sunPositionText = new QLineEdit(dockWidgetContents);
+        sunPositionText->setObjectName(QStringLiteral("sunPositionText"));
+        sunPositionText->setGeometry(QRect(200, 160, 31, 21));
         dockWidget->setWidget(dockWidgetContents);
         MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockWidget);
 
