@@ -1,6 +1,6 @@
 #include "VBO.h"
 
-#include "gl/datatype/VBOAttribMarker.h"
+#include "src/gl/datatype/VBOAttribMarker.h"
 
 namespace CS123 { namespace GL {
 
@@ -24,9 +24,7 @@ VBO::VBO(const float *data, int sizeInFloats, std::vector<VBOAttribMarker> marke
     glGenBuffers(1, &m_handle);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_handle);
-
-    glBufferData(GL_ARRAY_BUFFER, sizeInFloats * sizeof(GLfloat), data, GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, sizeInFloats * sizeof(GLfloat), &data[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -71,9 +69,8 @@ void VBO::bindAndEnable() const {
     bind();
     for (unsigned int i = 0; i < m_markers.size(); i++) {
         VBOAttribMarker am = m_markers[i];
-
-        glEnableVertexAttribArray(am.index);
-        glVertexAttribPointer(am.index, am.numElements, am.dataType, am.dataNormalize, m_stride, reinterpret_cast<GLvoid*>(am.offset));
+        glEnableVertexAttribArray(am.name);
+        glVertexAttribPointer(am.name, am.numElements, am.dataType, am.dataNormalize, m_stride, reinterpret_cast<GLvoid*>(am.offset));
     }
 }
 

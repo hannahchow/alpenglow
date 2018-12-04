@@ -13,7 +13,6 @@ public:
     void bind() const;
     void unbind() const;
 
-
 private:
     GLuint m_handle;
 };

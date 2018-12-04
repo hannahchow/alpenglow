@@ -16,8 +16,8 @@ VAO::VAO(const VBO &vbo, int numberOfVerticesToRender) :
 
     bind();
     vbo.bindAndEnable();
-    vbo.unbind();
     unbind();
+    vbo.unbind();
 }
 
 VAO::VAO(const VBO &vbo, const IBO &ibo, int numberOfVerticesToRender) :
@@ -36,6 +36,7 @@ VAO::VAO(const VBO &vbo, const IBO &ibo, int numberOfVerticesToRender) :
 }
 
 VAO::VAO(VAO &&that) :
+    m_VBO(std::move(that.m_VBO)),
     m_drawMethod(that.m_drawMethod),
     m_numVertices(that.m_numVertices),
     m_size(that.m_size),
@@ -47,6 +48,7 @@ VAO::VAO(VAO &&that) :
 VAO& VAO::operator=(VAO &&that) {
     this->~VAO();
 
+    m_VBO = std::move(that.m_VBO);
     m_drawMethod = that.m_drawMethod;
     m_handle = that.m_handle;
     m_numVertices = that.m_numVertices;
@@ -62,6 +64,8 @@ VAO::~VAO()
 {
     glDeleteVertexArrays(1, &m_handle);
 }
+
+
 
 void VAO::draw() {
     draw(m_numVertices);

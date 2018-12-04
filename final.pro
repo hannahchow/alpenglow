@@ -32,6 +32,20 @@ SOURCES += ui/mainwindow.cpp \
     lib/BGRA.cpp \
     lib/CS123XmlSceneParser.cpp \
     lib/ResourceLoader.cpp \
+    src/openglshape.cpp \
+    src/gl/GLDebug.cpp \
+    src/gl/datatype/FBO.cpp \
+    src/gl/datatype/IBO.cpp \
+    src/gl/datatype/VAO.cpp \
+    src/gl/datatype/VBO.cpp \
+    src/gl/datatype/VBOAttribMarker.cpp \
+    src/gl/textures/DepthBuffer.cpp \
+    src/gl/textures/RenderBuffer.cpp \
+    src/gl/textures/Texture.cpp \
+    src/gl/textures/Texture2D.cpp \
+    src/gl/textures/TextureParameters.cpp \
+    src/gl/textures/TextureParametersBuilder.cpp \
+
 
 HEADERS += ui/mainwindow.h \
     ui_mainwindow.h \
@@ -44,6 +58,20 @@ HEADERS += ui/mainwindow.h \
     lib/BGRA.h \
     lib/CS123XmlSceneParser.h \
     lib/ResourceLoader.h \
+    src/openglshape.h \
+    src/gl/GLDebug.h \
+    src/gl/datatype/FBO.h \
+    src/gl/datatype/IBO.h \
+    src/gl/datatype/VAO.h \
+    src/gl/datatype/VBO.cpp \
+    src/gl/datatype/VBOAttribMarker.h \
+    src/gl/shaders/ShaderAttribLocations.h \
+    src/gl/textures/DepthBuffer.h \
+    src/gl/textures/RenderBuffer.h \
+    src/gl/textures/Texture.h \
+    src/gl/textures/Texture2D.h \
+    src/gl/textures/TextureParameters.h \
+    src/gl/textures/TextureParametersBuilder.h \
 
 FORMS += ui/mainwindow.ui
 INCLUDEPATH += glm ui glew-1.10.0/include

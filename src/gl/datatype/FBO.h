@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "gl/textures/TextureParameters.h"
+#include "src/gl/textures/TextureParameters.h"
 
 namespace CS123 { namespace GL {
 
