@@ -5,8 +5,12 @@
 #include <QKeyEvent>
 #include <iostream>
 
+#include "lib/ResourceLoader.h"
+
 View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
-    m_time(), m_timer(), m_captureMouse(false)
+    m_time(), m_timer(), m_captureMouse(false),
+    m_mountainProgram(0),
+    m_quad(nullptr)
 {
     // View needs all mouse move events, not just mouse drag events
     setMouseTracking(true);
@@ -51,6 +55,26 @@ void View::initializeGL()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
+
+    m_mountainProgram = ResourceLoader::createShaderProgram(
+                ":/shaders/shader.vert", ":/shaders/shader.frag");
+    std::vector<GLfloat> quadData;
+    quadData = {
+        -1, 1, 0,//XYZ 1
+        0, 0, //UV 1
+        -1, -1, 0,//XYZ 2
+        0, 1,//UV 2
+        1, 1, 0,//XYZ 3
+        1, 0,//UV 3
+        1, -1, 0,//XYZ 4
+        1, 1//UV 4
+    };
+    m_quad = std::make_unique<OpenGLShape>();
+    m_quad->setVertexData(&quadData[0], quadData.size(), VBO::GEOMETRY_LAYOUT::LAYOUT_TRIANGLE_STRIP, 4);
+    m_quad->setAttribute(ShaderAttrib::POSITION, 3, 0, VBOAttribMarker::DATA_TYPE::FLOAT, false);
+    m_quad->setAttribute(ShaderAttrib::TEXCOORD0, 2, 3*sizeof(GLfloat), VBOAttribMarker::DATA_TYPE::FLOAT, false);
+    m_quad->buildVAO();
+
 }
 
 void View::paintGL()
@@ -58,6 +82,14 @@ void View::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // TODO: Implement the demo rendering here
+    glUseProgram(m_mountainProgram);
+    //glUniformMatrix4fv(glGetUniformLocation(m_mountainProgram, "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
+    //glUniformMatrix4fv(glGetUniformLocation(m_mountainProgram, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
+    //    glm::mat4 model = glm::mat4(1.f);
+    //glm::mat4 model = glm::translate(glm::vec3(0.0f, 1.2f, 0.0f));
+    //glUniformMatrix4fv(glGetUniformLocation(m_mountainProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    m_quad->draw();
+    glUseProgram(0);
 }
 
 void View::resizeGL(int w, int h)
