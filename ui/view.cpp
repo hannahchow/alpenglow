@@ -38,13 +38,7 @@ void View::initializeGL()
     // context and all OpenGL calls have no effect.
 
     //initialize glew
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if ( GLEW_OK != err ) {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        std::cerr << "Something is very wrong, glew initialization failed." << std::endl;
-    }
-    std::cout << "Using GLEW " <<  glewGetString( GLEW_VERSION ) << std::endl;
+    ResourceLoader::initializeGlew();
 
     // Start a timer that will try to get 60 frames per second (the actual
     // frame rate depends on the operating system and other running programs)
@@ -57,7 +51,7 @@ void View::initializeGL()
     glFrontFace(GL_CCW);
 
     m_mountainProgram = ResourceLoader::createShaderProgram(
-                ":/shaders/shader.vert", ":/shaders/shader.frag");
+                ":/shaders/default.vert", ":/shaders/default.frag");
     std::vector<GLfloat> quadData;
     quadData = {
         -1, 1, 0,//XYZ 1
@@ -83,11 +77,7 @@ void View::paintGL()
 
     // TODO: Implement the demo rendering here
     glUseProgram(m_mountainProgram);
-    //glUniformMatrix4fv(glGetUniformLocation(m_mountainProgram, "projection"), 1, GL_FALSE, glm::value_ptr(m_projection));
-    //glUniformMatrix4fv(glGetUniformLocation(m_mountainProgram, "view"), 1, GL_FALSE, glm::value_ptr(m_view));
-    //    glm::mat4 model = glm::mat4(1.f);
-    //glm::mat4 model = glm::translate(glm::vec3(0.0f, 1.2f, 0.0f));
-    //glUniformMatrix4fv(glGetUniformLocation(m_mountainProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glViewport(0,0, width(), height());
     m_quad->draw();
     glUseProgram(0);
 }
