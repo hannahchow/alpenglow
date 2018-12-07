@@ -77,7 +77,9 @@ void View::paintGL()
 
     // TODO: Implement the demo rendering here
     glUseProgram(m_mountainProgram);
-    glViewport(0,0, width(), height());
+    glm::vec2 resolution = glm::vec2(width(), height());
+    glViewport(0,0, resolution.x,resolution.y);
+    glUniform2fv(glGetUniformLocation(m_mountainProgram, "resolution"), 1, glm::value_ptr(resolution));
     m_quad->draw();
     glUseProgram(0);
 }
