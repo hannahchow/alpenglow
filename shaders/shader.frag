@@ -62,8 +62,7 @@ void main() {
     vec3 cameraRight = normalize(cross(cameraForward, up));
     vec3 cameraUp = normalize(cross(cameraRight, cameraForward));
 
-    vec2 modified_uv = (gl_FragCoord.xy/resolution.xy) - vec2(1.0);
-//            2.0*(gl_FragCoord.xy/resolution.xy) - vec2(1.0);
+    vec2 modified_uv = 2.0*(gl_FragCoord.xy/resolution.xy) - vec2(1.0);
     modified_uv.x *= resolution.x/resolution.y;
 
     vec3 rayDirection = vec3(modified_uv, 1.0);
