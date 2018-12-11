@@ -102,7 +102,8 @@ macx {
 }
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    images/images.qrc
 
 DISTFILES += \
     shaders/normals/normals.vert \

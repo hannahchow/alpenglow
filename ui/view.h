@@ -23,6 +23,7 @@ public:
 private:
     QTime m_time;
     QTimer m_timer;
+    GLuint m_textureID;
     GLuint m_mountainProgram;
     std::unique_ptr<OpenGLShape> m_quad;
     bool m_captureMouse;

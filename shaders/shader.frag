@@ -9,7 +9,9 @@ uniform sampler2D tex;
 uniform int useTexture = 0;
 uniform vec2 resolution;
 
-
+vec3 sampleTexture( sampler2D sam, in vec3 p, in vec3 n){
+    return(abs(n.x)*texture(sam, p.yz) + abs(n.y)*texture(sam, p.xz) + abs(n.z)*texture(sam, p.xy)).xyz;
+}
 
 float f(vec3 p){
     return sin(p.x)*sin(p.z);
@@ -43,6 +45,9 @@ vec3 render(vec3 ro, vec3 rd, float t){
     vec3 pos = ro + rd*t;
     vec3 n = calcNormal(pos);
     vec3 light = normalize(vec3(1.0,0.6,0.5));
+
+    float roughness = 0.5;
+    n = normalize(n+roughness*normalize(sampleTexture(tex, pos, n)));
 
     float ambient = 0.1;
     float diffuse = clamp(dot(n, light), 0.0, 1.0);

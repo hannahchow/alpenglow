@@ -10,7 +10,8 @@
 View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
     m_time(), m_timer(), m_captureMouse(false),
     m_mountainProgram(0),
-    m_quad(nullptr)
+    m_quad(nullptr),
+    m_textureID(0)
 {
     // View needs all mouse move events, not just mouse drag events
     setMouseTracking(true);
@@ -29,6 +30,7 @@ View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
 
 View::~View()
 {
+    glDeleteTextures(1, &m_textureID);
 }
 
 void View::initializeGL()
@@ -69,6 +71,12 @@ void View::initializeGL()
     m_quad->setAttribute(ShaderAttrib::TEXCOORD0, 2, 3*sizeof(GLfloat), VBOAttribMarker::DATA_TYPE::FLOAT, false);
     m_quad->buildVAO();
 
+    QImage image(":/images/terrain4.jpg");
+    glGenTextures(1, &m_textureID);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
 }
 
 void View::paintGL()
@@ -78,7 +86,8 @@ void View::paintGL()
     // TODO: Implement the demo rendering here
     glUseProgram(m_mountainProgram);
     glm::vec2 resolution = glm::vec2(width(), height());
-    glViewport(0,0, resolution.x,resolution.y);
+    glViewport(0,0, 2*resolution.x,2*resolution.y);
+    glBindTexture(m_textureID, GL_TEXTURE_2D);
     glUniform2fv(glGetUniformLocation(m_mountainProgram, "resolution"), 1, glm::value_ptr(resolution));
     m_quad->draw();
     glUseProgram(0);
