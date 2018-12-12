@@ -4,9 +4,15 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <iostream>
+#include "Settings.h"
+
+#include "lib/ResourceLoader.h"
 
 View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
-    m_time(), m_timer(), m_captureMouse(false)
+    m_time(), m_timer(), m_captureMouse(false),
+    m_mountainProgram(0),
+    m_quad(nullptr),
+    m_textureID(0)
 {
     // View needs all mouse move events, not just mouse drag events
     setMouseTracking(true);
@@ -25,6 +31,7 @@ View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
 
 View::~View()
 {
+    glDeleteTextures(1, &m_textureID);
 }
 
 void View::initializeGL()
@@ -34,13 +41,7 @@ void View::initializeGL()
     // context and all OpenGL calls have no effect.
 
     //initialize glew
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if ( GLEW_OK != err ) {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        std::cerr << "Something is very wrong, glew initialization failed." << std::endl;
-    }
-    std::cout << "Using GLEW " <<  glewGetString( GLEW_VERSION ) << std::endl;
+    ResourceLoader::initializeGlew();
 
     // Start a timer that will try to get 60 frames per second (the actual
     // frame rate depends on the operating system and other running programs)
@@ -51,13 +52,47 @@ void View::initializeGL()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
+
+    m_mountainProgram = ResourceLoader::createShaderProgram(
+                ":/shaders/default.vert", ":/shaders/default.frag");
+    std::vector<GLfloat> quadData;
+    quadData = {
+        -1, 1, 0,//XYZ 1
+        0, 0, //UV 1
+        -1, -1, 0,//XYZ 2
+        0, 1,//UV 2
+        1, 1, 0,//XYZ 3
+        1, 0,//UV 3
+        1, -1, 0,//XYZ 4
+        1, 1//UV 4
+    };
+    m_quad = std::make_unique<OpenGLShape>();
+    m_quad->setVertexData(&quadData[0], quadData.size(), VBO::GEOMETRY_LAYOUT::LAYOUT_TRIANGLE_STRIP, 4);
+    m_quad->setAttribute(ShaderAttrib::POSITION, 3, 0, VBOAttribMarker::DATA_TYPE::FLOAT, false);
+    m_quad->setAttribute(ShaderAttrib::TEXCOORD0, 2, 3*sizeof(GLfloat), VBOAttribMarker::DATA_TYPE::FLOAT, false);
+    m_quad->buildVAO();
+
+    QImage image(":/images/terrain2.jpg");
+    glGenTextures(1, &m_textureID);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
 }
 
 void View::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     // TODO: Implement the demo rendering here
+    glUseProgram(m_mountainProgram);
+    glm::vec2 resolution = glm::vec2(width(), height());
+    glViewport(0,0, 2*resolution.x,2*resolution.y);
+    glBindTexture(m_textureID, GL_TEXTURE_2D);
+    glUniform2fv(glGetUniformLocation(m_mountainProgram, "resolution"), 1, glm::value_ptr(resolution));
+    glUniform1f(glGetUniformLocation(m_mountainProgram, "roughness"), settings.roughness);
+    glUniform1f(glGetUniformLocation(m_mountainProgram, "sunPosition"), settings.sunPosition);
+    m_quad->draw();
+    glUseProgram(0);
 }
 
 void View::resizeGL(int w, int h)
