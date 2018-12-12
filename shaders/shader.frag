@@ -3,9 +3,9 @@
 in vec3 color;
 in vec2 texc;
 in vec2 uv;
-in float sunPosition;
 out vec4 fragColor;
 
+uniform float sunPosition;
 uniform float roughness;
 uniform sampler2D tex;
 uniform int useTexture = 0;
