@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <iostream>
+#include "Settings.h"
 
 #include "lib/ResourceLoader.h"
 
@@ -71,7 +72,7 @@ void View::initializeGL()
     m_quad->setAttribute(ShaderAttrib::TEXCOORD0, 2, 3*sizeof(GLfloat), VBOAttribMarker::DATA_TYPE::FLOAT, false);
     m_quad->buildVAO();
 
-    QImage image(":/images/terrain4.jpg");
+    QImage image(":/images/terrain2.jpg");
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -82,13 +83,14 @@ void View::initializeGL()
 void View::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     // TODO: Implement the demo rendering here
     glUseProgram(m_mountainProgram);
     glm::vec2 resolution = glm::vec2(width(), height());
     glViewport(0,0, 2*resolution.x,2*resolution.y);
     glBindTexture(m_textureID, GL_TEXTURE_2D);
     glUniform2fv(glGetUniformLocation(m_mountainProgram, "resolution"), 1, glm::value_ptr(resolution));
+    glUniform1f(glGetUniformLocation(m_mountainProgram, "roughness"), settings.roughness);
+    glUniform1f(glGetUniformLocation(m_mountainProgram, "sunPosition"), settings.sunPosition);
     m_quad->draw();
     glUseProgram(0);
 }

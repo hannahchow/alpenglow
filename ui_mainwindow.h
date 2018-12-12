@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.2.0
+** Created by: Qt User Interface Compiler version 5.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
@@ -34,10 +33,12 @@ public:
     View *view;
     QDockWidget *dockWidget;
     QWidget *dockWidgetContents;
-    QCheckBox *bumpMappingCheckbox;
     QSlider *sunPositionSlider;
     QLabel *label;
     QLineEdit *sunPositionText;
+    QSlider *roughnessSlider;
+    QLabel *label_2;
+    QLineEdit *roughnessText;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -63,9 +64,6 @@ public:
         dockWidget->setMaximumSize(QSize(247, 524287));
         dockWidgetContents = new QWidget();
         dockWidgetContents->setObjectName(QStringLiteral("dockWidgetContents"));
-        bumpMappingCheckbox = new QCheckBox(dockWidgetContents);
-        bumpMappingCheckbox->setObjectName(QStringLiteral("bumpMappingCheckbox"));
-        bumpMappingCheckbox->setGeometry(QRect(50, 250, 271, 31));
         sunPositionSlider = new QSlider(dockWidgetContents);
         sunPositionSlider->setObjectName(QStringLiteral("sunPositionSlider"));
         sunPositionSlider->setGeometry(QRect(30, 160, 160, 22));
@@ -76,6 +74,16 @@ public:
         sunPositionText = new QLineEdit(dockWidgetContents);
         sunPositionText->setObjectName(QStringLiteral("sunPositionText"));
         sunPositionText->setGeometry(QRect(200, 160, 31, 21));
+        roughnessSlider = new QSlider(dockWidgetContents);
+        roughnessSlider->setObjectName(QStringLiteral("roughnessSlider"));
+        roughnessSlider->setGeometry(QRect(30, 220, 160, 22));
+        roughnessSlider->setOrientation(Qt::Horizontal);
+        label_2 = new QLabel(dockWidgetContents);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(70, 240, 241, 31));
+        roughnessText = new QLineEdit(dockWidgetContents);
+        roughnessText->setObjectName(QStringLiteral("roughnessText"));
+        roughnessText->setGeometry(QRect(200, 220, 31, 21));
         dockWidget->setWidget(dockWidgetContents);
         MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockWidget);
 
@@ -86,9 +94,9 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "A CS123 Final", 0));
-        bumpMappingCheckbox->setText(QApplication::translate("MainWindow", "Bump Mapping", 0));
-        label->setText(QApplication::translate("MainWindow", "Sun Position", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "A CS123 Final", Q_NULLPTR));
+        label->setText(QApplication::translate("MainWindow", "Sun Position", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "Roughness", Q_NULLPTR));
     } // retranslateUi
 
 };

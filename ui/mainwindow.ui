@@ -49,19 +49,6 @@
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
-    <widget class="QCheckBox" name="bumpMappingCheckbox">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>250</y>
-       <width>271</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Bump Mapping</string>
-     </property>
-    </widget>
     <widget class="QSlider" name="sunPositionSlider">
      <property name="geometry">
       <rect>
@@ -93,6 +80,42 @@
       <rect>
        <x>200</x>
        <y>160</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QSlider" name="roughnessSlider">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>220</y>
+       <width>160</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>240</y>
+       <width>241</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Roughness</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="roughnessText">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>220</y>
        <width>31</width>
        <height>21</height>
       </rect>

@@ -3,8 +3,10 @@
 in vec3 color;
 in vec2 texc;
 in vec2 uv;
+in float sunPosition;
 out vec4 fragColor;
 
+uniform float roughness;
 uniform sampler2D tex;
 uniform int useTexture = 0;
 uniform vec2 resolution;
@@ -46,7 +48,6 @@ vec3 render(vec3 ro, vec3 rd, float t){
     vec3 n = calcNormal(pos);
     vec3 light = normalize(vec3(1.0,0.6,0.5));
 
-    float roughness = 0.5;
     n = normalize(n+roughness*normalize(sampleTexture(tex, pos, n)));
 
     float ambient = 0.1;
@@ -80,4 +81,4 @@ void main() {
     }
 
     fragColor = vec4(col, 1.0);
-}\
+}

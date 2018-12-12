@@ -7,5 +7,5 @@ Settings settings;
 void Settings::loadDefaults() {
     // Set the default values below
     sunPosition = 0.f;
-    bumpMapping = false;
+    roughness = 0.f;
 }

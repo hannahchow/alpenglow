@@ -5,7 +5,7 @@
 
 struct Settings{
     void loadDefaults();
-    bool bumpMapping;
+    float roughness;
     float sunPosition;
 };
 

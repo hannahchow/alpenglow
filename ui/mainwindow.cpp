@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     settings.loadDefaults();
     ui->setupUi(this);
+    dataBind();
 }
 
 MainWindow::~MainWindow()
@@ -28,7 +29,8 @@ void MainWindow::dataBind() {
 
     BIND(FloatBinding::bindSliderAndTextbox(
         ui->sunPositionSlider, ui->sunPositionText, settings.sunPosition, 0.f, 100.f))
-    BIND(BoolBinding::bindCheckbox(ui->bumpMappingCheckbox, settings.bumpMapping))
+    BIND(FloatBinding::bindSliderAndTextbox(
+        ui->roughnessSlider, ui->roughnessText, settings.roughness, 0.f, 1.f))
 
     #undef BIND
 }
