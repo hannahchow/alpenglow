@@ -15,6 +15,14 @@ vec3 sampleTexture( sampler2D sam, in vec3 p, in vec3 n){
     return(abs(n.x)*texture(sam, p.yz) + abs(n.y)*texture(sam, p.xz) + abs(n.z)*texture(sam, p.xy)).xyz;
 }
 
+vec3 blend(vec3 n1, vec3 n2){
+    vec3 n3 = n1 + vec3(0.0,0.0,1.0);
+    vec3 n4 = n2 * vec3(-1.0, -1.0, 1.0);
+    vec3 new_normal = normalize(n1*(n3 * dot(n3,n4) / n3.z - n4));
+    //vec3 new_normal = vec3(n1.xy + n2.xy, n1.z*n2.z);
+    return normalize(new_normal);
+}
+
 float f(vec3 p){
     return sin(p.x)*sin(p.z);
 }
@@ -48,7 +56,7 @@ vec3 render(vec3 ro, vec3 rd, float t){
     vec3 n = calcNormal(pos);
     vec3 light = normalize(vec3(1.0,0.6,0.5));
 
-    n = normalize(n + 3.5*n*roughness*sampleTexture(tex, pos, n));
+    n = mix(n,blend(n, normalize(sampleTexture(tex, pos, n))), roughness);
 
     float ambient = 0.1;
     float diffuse = clamp(dot(n, light), 0.0, 1.0);
