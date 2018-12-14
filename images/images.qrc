@@ -6,5 +6,8 @@
 	<file>terrain4.jpg</file>
 	<file>terrain5.jpg</file>
 	<file>terrain6.jpg</file>
+	<file>perlin1.png</file>
+	<file>perlin2.png</file>
+	<file>perlin3.jpeg</file>
     </qresource>
 </RCC>
