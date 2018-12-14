@@ -48,7 +48,7 @@ vec3 render(vec3 ro, vec3 rd, float t){
     vec3 n = calcNormal(pos);
     vec3 light = normalize(vec3(1.0,0.6,0.5));
 
-    n = normalize(n+roughness*normalize(sampleTexture(tex, pos, n)));
+    n = normalize(n + 3.5*n*roughness*sampleTexture(tex, pos, n));
 
     float ambient = 0.1;
     float diffuse = clamp(dot(n, light), 0.0, 1.0);
