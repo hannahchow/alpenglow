@@ -90,7 +90,9 @@ void View::paintGL()
     glViewport(0,0, 2*resolution.x,2*resolution.y);
     glBindTexture(m_textureID, GL_TEXTURE_2D);
     glUniform2fv(glGetUniformLocation(m_mountainProgram, "resolution"), 1, glm::value_ptr(resolution));
-    glUniform1f(glGetUniformLocation(m_mountainProgram, "roughness"), settings.roughness);
+    glUniform1i(glGetUniformLocation(m_mountainProgram, "normalMapping"), settings.normalMapping);
+    glUniform1f(glGetUniformLocation(m_mountainProgram, "snow"), settings.snow);
+    glUniform1i(glGetUniformLocation(m_mountainProgram, "octaves"), settings.octaves);
     glUniform1f(glGetUniformLocation(m_mountainProgram, "sunPosition"), settings.sunPosition);
     m_quad->draw();
     glUseProgram(0);

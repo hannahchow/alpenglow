@@ -6,7 +6,9 @@ in vec2 uv;
 out vec4 fragColor;
 
 uniform float sunPosition;
-uniform float roughness;
+uniform bool normalMapping;
+uniform float snow;
+uniform int octaves;
 uniform sampler2D tex;
 uniform int useTexture = 0;
 uniform vec2 resolution;
@@ -68,7 +70,7 @@ float heightmap(vec3 p) {
     float m = 0.4; // octave multiplier
 
     //iterating through 10 octaves of height
-    for (int i=0; i < 8; i++) {
+    for (int i=0; i < octaves; i++) {
         h += w * noise(p.xz * m);
         w *= 0.5;
         m *= 2.0;
@@ -161,7 +163,9 @@ vec3 render(vec3 ro, vec3 rd, float t){
     vec3 world = ro + rd * height;
 
     vec3 normal = calcNormal(world); // terrain normals
-    normal = blend(normal, sampleTexture(tex,world,normal));
+    if(normalMapping){
+        normal = blend(normal, sampleTexture(tex,world,normal));
+    }
 
     // color it like a mountain if it satisfies these heights
     if (height < dMax) {
