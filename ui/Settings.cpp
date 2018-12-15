@@ -9,5 +9,7 @@ void Settings::loadDefaults() {
     sunPosition = 0.f;
     octaves = 1;
     normalMapping = false;
-    snow = 0.f;
+    snowHeight = 0.f;
+    snowAmount = 0.f;
+    cameraZoom = 0.f;
 }

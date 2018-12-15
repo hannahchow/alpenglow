@@ -32,7 +32,11 @@ void MainWindow::dataBind() {
     BIND(IntBinding::bindSliderAndTextbox(
         ui->octavesSlider, ui->octavesText, settings.octaves, 1, 12))
     BIND(FloatBinding::bindSliderAndTextbox(
-        ui->snowSlider, ui->snowText, settings.snow, 0.1, 1.2))
+        ui->snowHeightSlider, ui->snowHeightText, settings.snowHeight, 0.1, 1.2))
+    BIND(FloatBinding::bindSliderAndTextbox(
+        ui->snowAmountSlider, ui->snowAmountText, settings.snowAmount, 0.1, 1.2))
+    BIND(FloatBinding::bindSliderAndTextbox(
+        ui->positionSlider, ui->positionText, settings.cameraZoom, 0.f, 10.f))
     BIND(BoolBinding::bindCheckbox(
         ui->normalMapping, settings.normalMapping))
 

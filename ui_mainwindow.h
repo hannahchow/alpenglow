@@ -40,10 +40,16 @@ public:
     QSlider *octavesSlider;
     QLabel *label_2;
     QLineEdit *octavesText;
-    QSlider *snowSlider;
-    QLineEdit *snowText;
+    QSlider *snowHeightSlider;
+    QLineEdit *snowHeightText;
     QLabel *label_3;
     QCheckBox *normalMapping;
+    QSlider *snowAmountSlider;
+    QLineEdit *snowAmountText;
+    QLabel *label_4;
+    QSlider *positionSlider;
+    QLineEdit *positionText;
+    QLabel *label_5;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -89,19 +95,39 @@ public:
         octavesText = new QLineEdit(dockWidgetContents);
         octavesText->setObjectName(QStringLiteral("octavesText"));
         octavesText->setGeometry(QRect(200, 220, 31, 21));
-        snowSlider = new QSlider(dockWidgetContents);
-        snowSlider->setObjectName(QStringLiteral("snowSlider"));
-        snowSlider->setGeometry(QRect(30, 280, 160, 22));
-        snowSlider->setOrientation(Qt::Horizontal);
-        snowText = new QLineEdit(dockWidgetContents);
-        snowText->setObjectName(QStringLiteral("snowText"));
-        snowText->setGeometry(QRect(200, 280, 31, 21));
+        snowHeightSlider = new QSlider(dockWidgetContents);
+        snowHeightSlider->setObjectName(QStringLiteral("snowHeightSlider"));
+        snowHeightSlider->setGeometry(QRect(30, 280, 160, 22));
+        snowHeightSlider->setOrientation(Qt::Horizontal);
+        snowHeightText = new QLineEdit(dockWidgetContents);
+        snowHeightText->setObjectName(QStringLiteral("snowHeightText"));
+        snowHeightText->setGeometry(QRect(200, 280, 31, 21));
         label_3 = new QLabel(dockWidgetContents);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(60, 300, 241, 31));
         normalMapping = new QCheckBox(dockWidgetContents);
         normalMapping->setObjectName(QStringLiteral("normalMapping"));
-        normalMapping->setGeometry(QRect(30, 340, 131, 20));
+        normalMapping->setGeometry(QRect(30, 400, 131, 20));
+        snowAmountSlider = new QSlider(dockWidgetContents);
+        snowAmountSlider->setObjectName(QStringLiteral("snowAmountSlider"));
+        snowAmountSlider->setGeometry(QRect(30, 330, 160, 22));
+        snowAmountSlider->setOrientation(Qt::Horizontal);
+        snowAmountText = new QLineEdit(dockWidgetContents);
+        snowAmountText->setObjectName(QStringLiteral("snowAmountText"));
+        snowAmountText->setGeometry(QRect(200, 330, 31, 21));
+        label_4 = new QLabel(dockWidgetContents);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setGeometry(QRect(60, 350, 241, 31));
+        positionSlider = new QSlider(dockWidgetContents);
+        positionSlider->setObjectName(QStringLiteral("positionSlider"));
+        positionSlider->setGeometry(QRect(30, 110, 160, 22));
+        positionSlider->setOrientation(Qt::Horizontal);
+        positionText = new QLineEdit(dockWidgetContents);
+        positionText->setObjectName(QStringLiteral("positionText"));
+        positionText->setGeometry(QRect(200, 110, 31, 21));
+        label_5 = new QLabel(dockWidgetContents);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setGeometry(QRect(70, 130, 241, 31));
         dockWidget->setWidget(dockWidgetContents);
         MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockWidget);
 
@@ -115,8 +141,10 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "A CS123 Final", 0));
         label->setText(QApplication::translate("MainWindow", "Sun Position", 0));
         label_2->setText(QApplication::translate("MainWindow", "Octaves", 0));
-        label_3->setText(QApplication::translate("MainWindow", "Snow Amount", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Snow Height", 0));
         normalMapping->setText(QApplication::translate("MainWindow", "Normal Map", 0));
+        label_4->setText(QApplication::translate("MainWindow", "Snow Amount", 0));
+        label_5->setText(QApplication::translate("MainWindow", "Camera zoom", 0));
     } // retranslateUi
 
 };

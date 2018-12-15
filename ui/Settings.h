@@ -8,7 +8,9 @@ struct Settings{
     int octaves;
     bool normalMapping;
     float sunPosition;
-    float snow;
+    float snowHeight;
+    float snowAmount;
+    float cameraZoom;
 };
 
 // The global Settings object, will be initialized by MainWindow
