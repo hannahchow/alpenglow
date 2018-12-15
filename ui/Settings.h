@@ -5,8 +5,12 @@
 
 struct Settings{
     void loadDefaults();
-    float roughness;
+    int octaves;
+    bool normalMapping;
     float sunPosition;
+    float snowHeight;
+    float snowAmount;
+    float cameraZoom;
 };
 
 // The global Settings object, will be initialized by MainWindow

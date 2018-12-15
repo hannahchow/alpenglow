@@ -6,10 +6,16 @@ in vec2 uv;
 out vec4 fragColor;
 
 uniform float sunPosition;
-uniform float roughness;
+uniform bool normalMapping;
+uniform float snowHieght;
+uniform float snowAmount;
+uniform int octaves;
 uniform sampler2D tex;
 uniform int useTexture = 0;
 uniform vec2 resolution;
+uniform float iTime;
+uniform float cameraPosition;
+
 vec3 light = normalize(vec3(sin(sunPosition/99.f*2)*50, sin(sunPosition/99.f*2)*200-50, sin(sunPosition/99.f*2-1)*100));
 float rrr = clamp(sin(sunPosition/99.f*2)*40, 0.0, 1.0);
 float ggg = clamp(sin(sunPosition/99.f*2)*30, 0.0, 0.5);
@@ -52,7 +58,7 @@ float overlay(float x, float y)
 }
 
 vec3 blend(vec3 n1, vec3 n2){
-    float factor = 0.15;
+    float factor = 0.05;
     return normalize(vec3(mix(n1.xy, n2.xy, factor), mix(n1.z, n2.z, 0.45-factor)));
 }
 
@@ -68,7 +74,7 @@ float heightmap(vec3 p) {
     float m = 0.4; // octave multiplier
 
     //iterating through 10 octaves of height
-    for (int i=0; i < 8; i++) {
+    for (int i=0; i < octaves; i++) {
         h += w * noise(p.xz * m);
         w *= 0.5;
         m *= 2.0;
@@ -161,7 +167,9 @@ vec3 render(vec3 ro, vec3 rd, float t){
     vec3 world = ro + rd * height;
 
     vec3 normal = calcNormal(world); // terrain normals
-    normal = blend(normal, sampleTexture(tex,world,normal));
+    if(normalMapping){
+        normal = blend(normal, sampleTexture(tex,world,normal));
+    }
 
     // color it like a mountain if it satisfies these heights
     if (height < dMax) {
@@ -191,7 +199,8 @@ vec3 render(vec3 ro, vec3 rd, float t){
 
 
 void main() {
-    vec3 rayOrigin = vec3(0.0, 3.5, -100.0);
+    vec3 rayOrigin = vec3(0.0, 2000, -100.0 - cameraPosition);
+    rayOrigin.y = 0.4 * noise((rayOrigin.xz * 0.5)) + 1.5;
     vec3 target = vec3(0.0);
     vec3 look = normalize(rayOrigin - target);
     vec3 up = vec3(0.0, 1.0, 0.0);
