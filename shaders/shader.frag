@@ -12,7 +12,7 @@ uniform int useTexture = 0;
 uniform vec2 resolution;
 vec3 light = normalize(vec3(sin(sunPosition/99.f*2)*50, sin(sunPosition/99.f*2)*200-50, sin(sunPosition/99.f*2-1)*100));
 float rrr = clamp(sin(sunPosition/99.f*2)*40, 0.0, 1.0);
-float ggg = clamp(sin(sunPosition/99.f*2)*30, 0.0, 0.6);
+float ggg = clamp(sin(sunPosition/99.f*2)*30, 0.0, 0.5);
 float bbb = 0.2;
 
 const float dMax = 10.0;
@@ -42,6 +42,19 @@ float noise(vec2 p) {
     return final;
 }
 
+
+float overlay(float x, float y)
+{
+    if (x < 0.5)
+        return 2.0*x*y;
+    else
+        return 1.0 - 2.0*(1.0 - x)*(1.0 - y);
+}
+
+vec3 blend(vec3 n1, vec3 n2){
+    float factor = 0.15;
+    return normalize(vec3(mix(n1.xy, n2.xy, factor), mix(n1.z, n2.z, 0.45-factor)));
+}
 
 float heightmap(vec3 p) {
 
@@ -111,7 +124,7 @@ vec4 sky_gradient(vec3 rd, vec3 sunpos, float t){
     vec4 color = mix(blue, lightblue, smoothstep(step1, step2, y* -t));
     color = mix(color, swapper, smoothstep(step2, step3, y* -t+0.2));
 
-    float sun = max(pow(clamp(dot(rd,sunpos), 0.0, 1.0), 1000.0), 0.0);
+    float sun = max(pow(clamp(dot(rd*vec3(-1,1,-1),sunpos), 0.0, 1.0), 1000.0), 0.0);
 
     color += vec4(rrr, ggg, bbb, 1.0)*sun;
     return color;
@@ -141,37 +154,44 @@ vec3 render(vec3 ro, vec3 rd, float t){
     //color of the sky
     float time = 2.2*cos(0.1*sunPosition);
     vec3 color = sky_gradient(rd, light, sunPosition/99.f*2-1).xyz;
+    //light = -light;
 
     float height = raymarch(ro, rd);
 
     vec3 world = ro + rd * height;
 
     vec3 normal = calcNormal(world); // terrain normals
-
+    normal = blend(normal, sampleTexture(tex,world,normal));
 
     // color it like a mountain if it satisfies these heights
     if (height < dMax) {
 
         // gray undertone of rock color
-        color = vec3(66.0, 62.0, 56.0) / 255.f;
+        color = vec3(102.0) / 255.f;
+
+        float slope = 1.0 - dot (normal, vec3 (0.0, 1.0, 0.0));
+
+        if (slope < 0.15 && world.y > 0.95){
+           color = mix(vec3(1.0, 1.0, 1.0), color, slope * slope);
+        }
 
         //phong lighting model
-        float ambient = 0.1;
-        float diffuse = clamp(dot(normal, light), 0.0, 1.0);
-        float specular = pow(clamp(dot(rd, reflect(light, normal)), 0.0, 1.0), 32.0);
-        float rr = clamp(sin(sunPosition/99.f*2)*5, 0.5, 1.0);
-        float gg = clamp(sin(sunPosition/99.f*2)*4, 0.5, 1.0);
-        float bb = 0.5;
+//        light.y = (sunPosition/99.f*2-1 >= -0.85 && sunPosition/99.f*2-1 <= 0.7) ? light.y + 75/(sunPosition*sunPosition) : light.y ;
+        float ambient = 0.25;
+        float diffuse = 1.5*clamp(dot(normal, light), 0.0, 1.0);
+        float rr = clamp(sin(sunPosition/99.f*2)*4, 0.5, 1.0);
+        float gg = clamp(sin(sunPosition/99.f*2)*4, 0.5, 0.9);
+        float bb = 0.7;
         vec3 suncolor = vec3(rr, gg, bb);
         color *= vec3(suncolor.xy, 0.8);
-        return color * (ambient + diffuse + specular);
+        color = color * (ambient + diffuse);
     }
     return color;
 }
 
 
 void main() {
-    vec3 rayOrigin = vec3(0.0, 3.5, 6.0);
+    vec3 rayOrigin = vec3(0.0, 3.5, -100.0);
     vec3 target = vec3(0.0);
     vec3 look = normalize(rayOrigin - target);
     vec3 up = vec3(0.0, 1.0, 0.0);
