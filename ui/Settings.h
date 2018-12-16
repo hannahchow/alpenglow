@@ -7,8 +7,8 @@ struct Settings{
     void loadDefaults();
     int octaves;
     bool normalMapping;
+    bool snowStatus;
     float sunPosition;
-    float snowHeight;
     float snowAmount;
     float cameraZoom;
 };

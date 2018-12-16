@@ -22,23 +22,24 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::dataBind() {
-    #define BIND(b) { \
-        DataBinding *_b = (b); \
-        m_bindings.push_back(_b); \
-    }
+#define BIND(b) { \
+    DataBinding *_b = (b); \
+    m_bindings.push_back(_b); \
+}
 
     BIND(FloatBinding::bindSliderAndTextbox(
-        ui->sunPositionSlider, ui->sunPositionText, settings.sunPosition, 0.f, 40.f))
-    BIND(IntBinding::bindSliderAndTextbox(
-        ui->octavesSlider, ui->octavesText, settings.octaves, 1, 12))
-    BIND(FloatBinding::bindSliderAndTextbox(
-        ui->snowHeightSlider, ui->snowHeightText, settings.snowHeight, 0.1, 1.2))
-    BIND(FloatBinding::bindSliderAndTextbox(
-        ui->snowAmountSlider, ui->snowAmountText, settings.snowAmount, 0.1, 1.2))
-    BIND(FloatBinding::bindSliderAndTextbox(
-        ui->positionSlider, ui->positionText, settings.cameraZoom, 0.f, 10.f))
-    BIND(BoolBinding::bindCheckbox(
-        ui->normalMapping, settings.normalMapping))
+             ui->sunPositionSlider, ui->sunPositionText, settings.sunPosition, 0.f, 40.f))
+            BIND(IntBinding::bindSliderAndTextbox(
+                     ui->octavesSlider, ui->octavesText, settings.octaves, 1, 12))
+            BIND(FloatBinding::bindSliderAndTextbox(
+                     ui->snowAmountSlider, ui->snowAmountText, settings.snowAmount, 0.05, 0.4))
+            BIND(FloatBinding::bindSliderAndTextbox(
+                     ui->positionSlider, ui->positionText, settings.cameraZoom, 0.f, 10.f))
+            BIND(BoolBinding::bindCheckbox(
+                     ui->normalMapping, settings.normalMapping))
+            BIND(BoolBinding::bindCheckbox(
+                     ui->snowStatus, settings.snowStatus))
 
-    #undef BIND
+
+        #undef BIND
 }

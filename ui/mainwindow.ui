@@ -89,7 +89,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>220</y>
+       <y>210</y>
        <width>160</width>
        <height>22</height>
       </rect>
@@ -102,66 +102,30 @@
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>240</y>
+       <y>230</y>
        <width>241</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Octaves</string>
+      <string>Terrain Octaves</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="octavesText">
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>220</y>
+       <y>210</y>
        <width>31</width>
        <height>21</height>
       </rect>
-     </property>
-    </widget>
-    <widget class="QSlider" name="snowHeightSlider">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>280</y>
-       <width>160</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="snowHeightText">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>280</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>300</y>
-       <width>241</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Snow Height</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="normalMapping">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>400</y>
+       <y>330</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -174,7 +138,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>330</y>
+       <y>260</y>
        <width>160</width>
        <height>22</height>
       </rect>
@@ -187,7 +151,7 @@
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>330</y>
+       <y>260</y>
        <width>31</width>
        <height>21</height>
       </rect>
@@ -196,14 +160,14 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>350</y>
+       <x>70</x>
+       <y>280</y>
        <width>241</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Snow Amount</string>
+      <string>Snowfall Amount</string>
      </property>
     </widget>
     <widget class="QSlider" name="positionSlider">
@@ -239,7 +203,20 @@
       </rect>
      </property>
      <property name="text">
-      <string>Camera zoom</string>
+      <string>Camera Position</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="snowStatus">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>370</y>
+       <width>72</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Snow</string>
      </property>
     </widget>
    </widget>
