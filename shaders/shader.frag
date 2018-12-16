@@ -21,83 +21,78 @@ float rrr = clamp(sin(sunPosition/99.f*2)*40, 0.0, 1.0);
 float ggg = clamp(sin(sunPosition/99.f*2)*30, 0.0, 0.5);
 float bbb = 0.2;
 
-const float dMax = 10.0;
+const float maxDistance = 16.0;
 
+// semi random number generator
 float rand(vec2 p) {
     return fract(sin(dot(p, vec2(12.231,64.102))) * 63360.01203);
 }
 
-
+// implementation of perlin noise for our terrain noise function
 float noise(vec2 p) {
     float A = rand(vec2(floor(p.x), floor(p.y)));
     float B = rand(vec2(floor(p.x) + 1.0, floor(p.y)));
     float C = rand(vec2(floor(p.x), floor(p.y) + 1.0));
     float D = rand(vec2(floor(p.x) + 1.0, floor(p.y) + 1.0));
 
-    float fc = fract(p.x);
-    float bicubicc = fc * fc * (3.0 - 2.0 * fc);
+    float fx = fract(p.x);
+    float interpx = fx * fx * (3.0 - 2.0 * fx);
 
-    float fr = fract(p.y);
-    float bicubicr = fr * fr * (3.0 - 2.0 * fr);
+    float fy = fract(p.y);
+    float interpy = fy * fy * (3.0 - 2.0 * fy);
 
-    float AB = mix(A, B, bicubicc);
-    float CD = mix(C, D, bicubicc);
+    float AB = mix(A, B, interpx);
+    float CD = mix(C, D, interpx);
 
-    float final = mix(AB, CD, bicubicr);
+    float final = mix(AB, CD, interpy);
 
     return final;
-}
-
-
-float overlay(float x, float y)
-{
-    if (x < 0.5)
-        return 2.0*x*y;
-    else
-        return 1.0 - 2.0*(1.0 - x)*(1.0 - y);
 }
 
 vec3 blend(vec3 n1, vec3 n2){
     float factor = 0.05;
     return normalize(vec3(mix(n1.xy, n2.xy, factor), mix(n1.z, n2.z, 0.45-factor)));
 }
-
-float heightmap(vec3 p) {
-
-    float dMin = dMax; // nearest intersection
-    float d; // depth
-    float material = -1.0; // material ID
-
-    // adding octaves of height
-    float h = 0.0; // height
-    float w = 0.5; // octave weight
-    float m = 0.4; // octave multiplier
-
-    //iterating through 10 octaves of height
-    for (int i=0; i < octaves; i++) {
-        h += w * noise(p.xz * m);
-        w *= 0.5;
-        m *= 2.0;
-    }
-
-    //makes a more mountainous look
-    h += smoothstep(0.1, 1.0, h);
-
-    d = p.y - h;
-    if (d<dMin) {
-        dMin = d;
-        material = 0.0;
-    }
-    return dMin;
-}
-
 vec3 sampleTexture( sampler2D sam, in vec3 p, in vec3 n){
     return(abs(n.x)*texture(sam, p.yz) + abs(n.y)*texture(sam, p.xz) + abs(n.z)*texture(sam, p.xy)).xyz;
 }
 
-const float epsilon = 0.001;
-vec2 e = vec2(epsilon, 0.0); // For swizzling
+float heightmap(vec3 p) {
+
+    float currDistance = maxDistance;
+    float depth;
+
+    //indicates whether or not there should be color (aka no need to add when raymarching stops)
+    float material = -1.0;
+
+    // adding octaves of noise waves to create more rugged terrain
+    float height = 0.0;
+    float weight = 0.5;
+    float mult = 0.4;
+
+    //iterating through user-specified octaves of height
+    for (int i=0; i < octaves; i++) {
+        height += weight * noise(p.xz * mult);
+        weight *= 0.5;
+        mult *= 2.0;
+    }
+
+    //makes a more mountainous look by boosting the mountain peaks and plateauing the rest
+    height += smoothstep(0.1, 1.0, height);
+
+    //if the depth is within the range we are marching for, we should color it!
+    depth = p.y - height;
+    if (depth < currDistance) {
+        currDistance = depth;
+        material = 0.0;
+    }
+
+    return currDistance;
+}
+
 vec3 calcNormal(vec3 p) {
+    const float epsilon = 0.001;
+    vec2 e = vec2(epsilon, 0.0); // For swizzling
     float x = heightmap(p - e.xyy) - heightmap(p + e.xyy);
     float y = 2.0*epsilon;
     float z = heightmap(p - e.yyx) - heightmap(p + e.yyx);
@@ -140,51 +135,55 @@ vec4 sky_gradient(vec3 rd, vec3 sunpos, float t){
     return color;
 }
 
+//standard raymarching, with checking whether the height we have generated needs to be applied
 float raymarch(vec3 ro, vec3 rd){
-    const float marchDist = 0.001; // precision
-    float currHeight = 0.0; // distance
-    float nextStep = marchDist * 2.0; // step
 
-    for (int i=0; i < 36; i++) {
+    const float marchDist = 0.001;
+    float t = 0.0;
+    float nextStep = marchDist * 2.0;
+
+    for (int i=0; i < 100; i++) {
         if (abs(nextStep)> marchDist) {
-            currHeight += nextStep; // next step
-            float pos = heightmap(ro + rd * currHeight); // next intersection
-            nextStep = pos; // distance
+            t += nextStep;
+            float pos = heightmap(ro + rd * t);
+            nextStep = pos;
         } else {
             break;
         }
     }
-    return currHeight;
+    return t;
 }
 
-float ynewy = gl_FragCoord.y / resolution.y;
-vec4 coral2 = vec4(233, 133, 129, 255) / 255.f;
-vec4 gray2 = vec4(208, 205, 220, 255) / 255.f;
-
 vec3 render(vec3 ro, vec3 rd, float t){
+
     //color of the sky
-    float time = 2.2*cos(0.1*sunPosition);
+    float time = 2.2 * cos(0.1 * sunPosition);
     vec3 color = sky_gradient(rd, light, sunPosition/99.f*2-1).xyz;
+
+    //mixing color for fog (comes later)
     vec3 fogcol = color;
-    //light = -light;
 
-    float height = raymarch(ro, rd);
+    //current raymarched distance
+    float dist = raymarch(ro, rd);
 
-    vec3 world = ro + rd * height;
+    //current position in world space
+    vec3 world = ro + rd * dist;
 
-    vec3 normal = calcNormal(world); // terrain normals
+    vec3 normal = calcNormal(world);
     if(normalMapping){
         normal = blend(normal, sampleTexture(tex,world,normal));
     }
+
     // vec2 used to generate random value for gradiating the snowline
     vec2 rander = vec2(rd.x,rd.y);
 
     // color it like a mountain if it satisfies these heights
-    if (height < dMax) {
+    if (dist < maxDistance) {
 
         // gray undertone of rock color
         color = vec3(102.0) / 255.f;
 
+        //calculates slope of mountainface
         float slope = 1.0 - dot (normal, vec3 (0.0, 1.0, 0.0));
 
         float ambient = 0.25;
@@ -200,33 +199,35 @@ vec3 render(vec3 ro, vec3 rd, float t){
         color *= vec3(suncolor.xy, 0.8);
         color = color * (ambient + diffuse);
 
+        //lighting and coloring for the snow (shinier than normal!)
         if (snowStatus && slope < snowAmount && world.y > 1.0-(0.2*rand(rander))){
             color = mix(vec3(1.0, 1.0, 1.0), color, slope * slope);
-            float ambient = 0.6;
-            float diffuse = 0.8 * clamp(dot(normal, light), 0.0, 1.0);
-            float specular = pow(clamp(dot(rd, reflect(light, normal)),  0.0, 1.0), 32.0);
-            float rr = clamp(sin(sunPosition/99.f*2)*4, 0.5, 1.0);
-            float gg = clamp(sin(sunPosition/99.f*2)*4, 0.5, 0.9);
-            float bb = 1.0;
-            vec3 suncolor = vec3(rr, gg, bb);
+            float snowambient = 0.6;
+            float snowdiffuse = 0.8 * clamp(dot(normal, light), 0.0, 1.0);
+            float snowspecular = pow(clamp(dot(rd, reflect(light, normal)),  0.0, 1.0), 32.0);
+            float snowrr = clamp(sin(sunPosition/99.f*2)*4, 0.5, 1.0);
+            float snowgg = clamp(sin(sunPosition/99.f*2)*4, 0.5, 0.9);
+            float snowbb = 1.0;
+            vec3 suncolor = vec3(snowrr, snowgg, snowbb);
             color = mix(color, vec3(suncolor.xy, 0.8), 0.5);
-            color = color * (ambient + diffuse + specular);
+            color = color * (snowambient + snowdiffuse + snowspecular);
         }
     }
 
-    if (height > dMax) {
-        float fog = exp(-0.005 * height * height); // exponential fog equation
-        color = mix(color, mix(fogcol, vec3(1.0), 1.0), fog); // add fog in distance
+    //exponential fog equation (amount of fog that should be added as a product of the current distance)
+    float fogamount = exp(-0.005 * dist * dist); // exponential fog equation
+
+    //adding fog in
+    if (dist > maxDistance) {
+        color = mix(color, mix(fogcol, vec3(1.0), 1.0), fogamount); // add fog behind where we raymarch / in the sky
     } else {
-        float fog = exp(-0.005 * height * height); // exponential fog equation
-        color = mix(vec3(1.0), color, fog); // add fog in distance
+        color = mix(vec3(1.0), color, fogamount); // add fog over the back mountains for a fade
     }
     return color;
 }
 
-
 void main() {
-    vec3 rayOrigin = vec3(0.0, 2000, -100.0 - cameraPosition);
+    vec3 rayOrigin = vec3(0.0, cameraPosition, -100.0 - cameraPosition);
     rayOrigin.y = 0.4 * noise((rayOrigin.xz * 0.5)) + 1.5;
     vec3 target = vec3(0.0);
     vec3 look = normalize(rayOrigin - target);
@@ -242,7 +243,7 @@ void main() {
     vec3 rayDirection = vec3(modified_uv, 1.0);
     rayDirection = normalize(rayDirection.x * cameraRight + rayDirection.y * cameraUp + rayDirection.z * cameraForward);
 
-    float t = raymarch(rayOrigin, rayDirection);
+    float t = raymarch(rayOrigin + vec3(0.0, -1500.0, 0.0), rayDirection);
     vec3 col = vec3(0.0);
     col = render(rayOrigin, rayDirection, t);
     fragColor = vec4(col, 1.0);
