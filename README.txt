@@ -2,7 +2,7 @@ How to run
 Run the executable file. Then, once in UI, it will begin with a simple, low definition mountain at dawn. From there, the following options are available:
 * Use the position slider. This will affect the position of the camera, allowing you to traverse the terrain
 * Use the sunPosition slider. This will affect time of day, which leads to the sun being in a different position in the sky, the sky having different colors, the scene being lit differently, etc. 
-* Use the octaves slider. This will affect the number of octaves of noise being used in the mountain range, resulting in more/less realistic noise
+* Use the octaves slider. This will affect the number of octaves of noise being used in the mountain range, resulting in more/less realistic terrain
 * Use the snowAmount sliders, which will control the parameter determining amount of snow at the top of the mountain
 * Use the snow checkbox to initiate snow in the first place!
 * Use the normal mapping checkbox, which will apply a normal map to increase the noise of the surface normals. Particularly helpful in low octaves where there isn’t much noise to begin with.

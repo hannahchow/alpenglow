@@ -49,10 +49,12 @@ float noise(vec2 p) {
     return final;
 }
 
+//blends two normals. Used to combine surface normal with normal map normal
 vec3 blend(vec3 n1, vec3 n2){
-    float factor = 0.05;
-    return normalize(vec3(mix(n1.xy, n2.xy, factor), mix(n1.z, n2.z, 0.45-factor)));
+    return normalize(vec3(mix(n1.xy, n2.xy, 0.05), mix(n1.z, n2.z, 0.4)));
 }
+
+//used to sample texture for the purpose of normal mapping using point and normal vector to weight.
 vec3 sampleTexture( sampler2D sam, in vec3 p, in vec3 n){
     return(abs(n.x)*texture(sam, p.yz) + abs(n.y)*texture(sam, p.xz) + abs(n.z)*texture(sam, p.xy)).xyz;
 }
@@ -227,24 +229,26 @@ vec3 render(vec3 ro, vec3 rd, float t){
 }
 
 void main() {
+    //uses camera position as input for ray origin. Specifies looking information
     vec3 rayOrigin = vec3(0.0, cameraPosition, -100.0 - cameraPosition);
     rayOrigin.y = 0.4 * noise((rayOrigin.xz * 0.5)) + 1.5;
     vec3 target = vec3(0.0);
     vec3 look = normalize(rayOrigin - target);
     vec3 up = vec3(0.0, 1.0, 0.0);
 
+    //specifying camera information
     vec3 cameraForward = -look;
     vec3 cameraRight = normalize(cross(cameraForward, up));
     vec3 cameraUp = normalize(cross(cameraRight, cameraForward));
 
+    //finds uv coordinates -- taken from lab10
     vec2 modified_uv = 2.0*(gl_FragCoord.xy/resolution.xy) - vec2(1.0);
     modified_uv.x *= resolution.x/resolution.y;
 
+    //raymarch point to get color
     vec3 rayDirection = vec3(modified_uv, 1.0);
     rayDirection = normalize(rayDirection.x * cameraRight + rayDirection.y * cameraUp + rayDirection.z * cameraForward);
-
     float t = raymarch(rayOrigin + vec3(0.0, -1500.0, 0.0), rayDirection);
-    vec3 col = vec3(0.0);
-    col = render(rayOrigin, rayDirection, t);
+    vec3 col = render(rayOrigin, rayDirection, t);
     fragColor = vec4(col, 1.0);
 }
