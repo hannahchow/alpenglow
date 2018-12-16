@@ -178,8 +178,9 @@ vec3 render(vec3 ro, vec3 rd, float t){
         color = vec3(102.0) / 255.f;
 
         float slope = 1.0 - dot (normal, vec3 (0.0, 1.0, 0.0));
+        vec2 rander = vec2(rd.x,rd.y);
 
-        if (slope < 0.15 && world.y > 0.95){
+        if (slope < 0.3 && world.y > 1.0-(0.2*rand(rander))){
            color = mix(vec3(1.0, 1.0, 1.0), color, slope * slope);
         }
 
